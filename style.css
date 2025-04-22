@@ -1,0 +1,91 @@
+body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh; /* Устанавливаем минимальную высоту для body */
+            margin: 0;
+            padding: 0;
+        }
+
+        .accordion-button {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-link.active {
+            background-color: #007bff; /* Цвет активной ссылки */
+            color: white; /* Цвет текста активной ссылки */
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap; /* Позволяет кнопкам занимать несколько строк */
+            margin-top: 10px; /* Отступ сверху */
+        }
+        .button-container button {
+            flex: 1 1 calc(50% - 5px); /* Два столбца, с учетом отступов */
+            margin-bottom: 5px; /* Отступ между кнопками */
+            text-align: left; /* Выравнивание текста по левому краю */
+        }
+        .f1{
+            margin-top: 200px;
+        }
+  
+          .nav-link {
+            text-decoration: none; /* Убираем подчеркивание */
+        }
+
+        /* Меняем цвет текста кнопок */
+        .nav-link.btn {
+            color: #ffffff; /* Цвет текста кнопок (белый) */
+        }
+
+        /* Меняем цвет текста при наведении */
+        .nav-link.btn:hover {
+            color: black; /* Цвет текста при наведении (например, желтый) */
+        }
+  
+
+        .sidenav {
+            padding-top: 20px;
+            height: 100%; /* Full height */
+            overflow-y: auto; /* Scroll if needed */
+            font-size: 10;
+        }
+
+        .sidenav a {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            border-radius: 5px;
+        }
+
+        
+
+        .sidenav a:hover {
+            color: #fff;
+            background-color: #007bff;
+        }
+        
+
+        #contentIframe {
+            width: 100%; /* Full width */
+            height: 700px; /* Full height */
+            margin-bottom: 20px;
+        }
+
+
+.color-button {
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.color-button:hover {
+    background-color: #e0e0e0; /* Добавляем эффект при наведении */
+}
+
+        #closeButton {
+          margin-left: 80%;
+          display: none;
+        }
