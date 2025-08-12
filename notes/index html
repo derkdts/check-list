@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Записи</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+      integrity="sha384-gH9dy4qp77G7i0STjYo9p58MEgDKI+uhqX1RYtX4ChGk8q0A2amYmG3tpxOghYxM" crossorigin="anonymous">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+<style>
+  body, html {
+    height: 100%;
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .wrapper {
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .container {
+    max-width: 600px;
+    width: 100%;
+    background: #1e1e1e;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.6),
+      0 0 12px rgba(0, 123, 255, 0.4);
+  }
+  h1, h2 {
+    font-weight: 600;
+  }
+  button.btn {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  #downloadBtn:hover {
+    background-color: #28a745cc;
+    border-color: #28a745cc;
+  }
+
+  /* Таблица в стиле заметок */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    background: transparent;
+  }
+  table thead tr {
+    background-color: transparent;
+  }
+  table thead th {
+    color: #99aabb;
+    font-weight: 600;
+    border: none;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    user-select: none;
+  }
+  table tbody tr {
+    background-color: #2a2a2a;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease;
+    display: table-row;
+    cursor: default;
+  }
+  table tbody tr:hover {
+    box-shadow: 0 6px 16px rgba(0,123,255,0.6);
+    background-color: #333;
+  }
+  table tbody td {
+    border: none;
+    padding: 1rem 1.2rem;
+    vertical-align: middle;
+    font-size: 1rem;
+    color: #ddd;
+    user-select: text;
+  }
+  table tbody td:last-child {
+    width: 80px;
+    text-align: center;
+    padding: 1rem 1rem;
+  }
+  .btn-danger {
+    font-size: 1rem;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.25s ease;
+  }
+  .btn-danger:hover {
+    background-color: #ff5252;
+    box-shadow: 0 0 8px #ff5252;
+  }
+  #actionsHeader {
+    width: 80px !important;
+    color: #99aabb;
+    font-weight: 600;
+    user-select: none;
+  }
+
+  /* Стили формы добавления записи */
+  #entryForm {
+    background-color: #292929;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.5),
+      inset 0 0 10px rgba(255, 255, 255, 0.05);
+    transition: box-shadow 0.3s ease;
+  }
+  #entryForm:focus-within {
+    box-shadow:
+      0 12px 34px rgba(0, 123, 255, 0.7),
+      inset 0 0 20px rgba(0, 123, 255, 0.1);
+  }
+  #entryForm .form-control {
+    background-color: #1e1e1e;
+    border: 1.8px solid #444;
+    border-radius: 10px;
+    color: #ddd;
+    font-size: 1.05rem;
+    padding: 1rem 3rem 1rem 3.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: none;
+  }
+  #entryForm .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 8px #0d6efd99;
+    background-color: #222;
+    color: #fff;
+    outline: none;
+  }
+  #entryForm label {
+    color: #a0a0a0;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  #entryForm .form-control:focus ~ label {
+    color: #0d6efd;
+  }
+  #entryForm .form-icon {
+    color: #6c757d;
+    font-size: 1.3rem;
+    transition: color 0.3s ease;
+  }
+  #entryForm .form-control:focus ~ .form-icon {
+    color: #0d6efd;
+  }
+  #entryForm button.btn {
+    background: linear-gradient(135deg, #0d6efd, #0046d4);
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    box-shadow:
+      0 6px 12px rgba(13, 110, 253, 0.6);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    color: white;
+  }
+  #entryForm button.btn:hover {
+    background: linear-gradient(135deg, #0056ff, #003bb5);
+    box-shadow:
+      0 8px 20px rgba(0, 86, 255, 0.8);
+  }
+
+  /* Остальные стили формы, иконок и адаптива */
+  .form-floating > .form-control {
+    padding-left: 3rem;
+  }
+  .form-floating > label {
+    left: 3rem;
+  }
+  .was-validated .form-control:invalid {
+    border-color: #dc3545;
+    padding-left: 3rem;
+  }
+  .was-validated .form-control:invalid ~ .form-icon {
+    color: #dc3545;
+  }
+  @media (max-width: 480px) {
+    .container {
+      padding: 20px;
+    }
+    button.btn {
+      font-size: 1rem;
+    }  
+    #entryForm {
+      padding: 20px 15px;
+    }
+    #entryForm .form-control {
+      padding-left: 3rem;
+    }
+    #entryForm button.btn {
+      font-size: 1rem;
+      padding: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="container" id="loginContainer">
+    <h1 class="mb-4 text-center">Вход</h1>
+    <form id="loginForm" class="needs-validation" novalidate>
+      <div class="form-floating mb-3 position-relative">
+        <input type="text" class="form-control" id="loginUsername" placeholder="Логин" required>
+        <label for="loginUsername">Логин</label>
+        <i class="bi bi-person-circle form-icon"></i>
+        <div class="invalid-feedback ps-3">Введите логин.</div>
+      </div>
+      <div class="form-floating mb-4 position-relative">
+        <input type="password" class="form-control" id="loginPassword" placeholder="Пароль" required>
+        <label for="loginPassword">Пароль</label>
+        <i class="bi bi-lock-fill form-icon"></i>
+        <div class="invalid-feedback ps-3">Введите пароль.</div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+      </button>
+    </form>
+    <div id="loginError" class="text-danger mt-3 text-center" style="display:none;">Неверный логин или пароль</div>
+  </div>
+
+  <div class="container" id="mainContainer" style="display:none;">
+    <h1 class="mb-4 text-center">Добавить запись</h1>
+
+    <form id="entryForm" class="mb-4 needs-validation" novalidate>
+
+      <div class="form-floating mb-3 position-relative">
+        <label for="name">Имя</label>
+        <i class="bi bi-person-fill form-icon"></i>        
+		<input type="text" class="form-control" id="name" placeholder="Имя" required>
+
+      </div>
+
+      <div class="form-floating mb-4 position-relative">
+        <label for="message">Комментарий</label>
+        <i class="bi bi-chat-text-fill form-icon"></i>
+		<textarea class="form-control" id="message" placeholder="Сообщение" style="height: 120px" required></textarea>
+      </div>
+<br>
+      <button type="submit" class="btn btn-primary w-100 mb-3">
+        <i class="bi bi-save-fill me-2"></i>Сохранить
+      </button>
+    </form>
+
+    <h2 class="mb-3 text-center">Все записи</h2>
+
+    <div class="table-responsive mb-3" style="max-height: 300px; overflow-y: auto;">
+      <table id="recordsTable" class="table table-striped table-dark table-bordered align-middle">
+        <thead>
+          <tr>
+            <th>Имя</th>
+            <th>Сообщение</th>
+            <th style="width: 90px;" id="actionsHeader" style="display:none;">Действия</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+	<br>
+
+    <button id="downloadBtn" class="btn btn-success w-100" style="display:none;">
+      <i class="bi bi-file-earmark-excel-fill me-2"></i>Скачать Excel
+    </button>
+<br>
+    <button id="logoutBtn" class="btn btn-outline-light w-100 mt-3">
+      <i class="bi bi-box-arrow-left me-2"></i>Выйти
+    </button>
+  </div>
+</div>
+
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script>
+  const users = {
+    admin: { password: 'admin123', role: 'admin' },
+    user: { password: 'user123', role: 'user' }
+  };
+
+  const loginContainer = document.getElementById('loginContainer');
+  const mainContainer = document.getElementById('mainContainer');
+  const loginForm = document.getElementById('loginForm');
+  const loginError = document.getElementById('loginError');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const form = document.getElementById('entryForm');
+  const tableBody = document.querySelector('#recordsTable tbody');
+  const actionsHeader = document.getElementById('actionsHeader');
+
+  let records = JSON.parse(localStorage.getItem('records') || '[]');
+  let currentUser = null;
+
+  // Универсальная валидация форм
+  function enableValidation(formElement) {
+    formElement.addEventListener('submit', event => {
+      if (!formElement.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      formElement.classList.add('was-validated');
+    }, false);
+  }
+
+  enableValidation(loginForm);
+  enableValidation(form);
+
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!loginForm.checkValidity()) return;
+
+    const username = loginForm.loginUsername.value.trim();
+    const password = loginForm.loginPassword.value.trim();
+
+    if(users[username] && users[username].password === password) {
+      currentUser = { username, role: users[username].role };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      loginError.style.display = 'none';
+      loginForm.reset();
+      loginForm.classList.remove('was-validated');
+
+      loginContainer.style.display = 'none';
+      mainContainer.style.display = 'block';
+
+      setupUserUI();
+      renderTable();
+    } else {
+      loginError.style.display = 'block';
+      setTimeout(() => loginError.style.display = 'none', 3000);
+    }
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    mainContainer.style.display = 'none';
+    loginContainer.style.display = 'block';
+  });
+
+  function safeTextNode(text) {
+    return document.createTextNode(text);
+  }
+
+  function renderTable() {
+    tableBody.innerHTML = '';
+    if(records.length === 0){
+      let colspan = currentUser && currentUser.role === 'admin' ? 3 : 2;
+      tableBody.innerHTML = `<tr><td colspan="${colspan}" class="text-center text-muted">Нет записей</td></tr>`;
+      return;
+    }
+
+    records.forEach((rec, index) => {
+      const tr = document.createElement('tr');
+
+      const tdName = document.createElement('td');
+      tdName.appendChild(safeTextNode(rec.name));
+      tr.appendChild(tdName);
+
+      const tdMsg = document.createElement('td');
+      tdMsg.appendChild(safeTextNode(rec.message));
+      tr.appendChild(tdMsg);
+
+      if (currentUser?.role === 'admin') {
+        const tdDel = document.createElement('td');
+        const btnDel = document.createElement('button');
+        btnDel.className = 'btn btn-sm btn-danger';
+        btnDel.title = 'Удалить запись';
+        btnDel.innerHTML = `<i class="bi bi-trash"></i>`;
+        btnDel.addEventListener('click', () => {
+          if (confirm('Удалить запись?')) {
+            records.splice(index, 1);
+            localStorage.setItem('records', JSON.stringify(records));
+            renderTable();
+          }
+        });
+        tdDel.appendChild(btnDel);
+        tr.appendChild(tdDel);
+      }
+
+      tableBody.appendChild(tr);
+    });
+  }
+
+  // Валидация и добавление записи
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!form.checkValidity()) return;
+
+    const name = form.name.value.trim();
+    const message = form.message.value.trim();
+
+    records.push({name, message});
+    localStorage.setItem('records', JSON.stringify(records));
+    renderTable();
+
+    form.reset();
+    form.classList.remove('was-validated');
+    form.name.focus();
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if(!currentUser || currentUser.role !== 'admin') {
+      alert('Только администратор может скачать Excel.');
+      return;
+    }
+    if(records.length === 0) {
+      alert('Нет записей для экспорта');
+      return;
+    }
+
+    const data = [['Имя', 'Сообщение'], ...records.map(r => [r.name, r.message])];
+
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Записи');
+
+    XLSX.writeFile(wb, 'records.xlsx');
+  });
+
+  function setupUserUI() {
+    if(currentUser && currentUser.role === 'admin') {
+      downloadBtn.style.display = 'block';
+      actionsHeader.style.display = '';
+    } else {
+      downloadBtn.style.display = 'none';
+      actionsHeader.style.display = 'none';
+    }
+  }
+
+  window.addEventListener('load', () => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      currentUser = JSON.parse(savedUser);
+      loginContainer.style.display = 'none';
+      mainContainer.style.display = 'block';
+      setupUserUI();
+      renderTable();
+    }
+  });
+</script>
+
+</body>
+</html>
